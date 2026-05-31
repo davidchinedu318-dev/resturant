@@ -1,22 +1,29 @@
-import Link from 'next/link'
-import React from 'react'
 
-const Navbar = () => {
+import Link from "next/link";
+
+export default function Navbar() {
   return (
-    <div className='flex bg-gray-800 text-white p-4 justify-between items-center'>
-        <div className='text-orange-300 font-semibold text-5xl '>fool</div>
-        <div className='space-x-4'>
-            <Link href="/">Home</Link>
-            <Link href="/about">About</Link>
-            <Link href="/contact">Contact</Link>
-            <Link href="/blog">Blog</Link>
-        </div>
-        <div className='space-x-4'>
-            <button className='bg-orange-300 text-gray-800 px-4 py-2 rounded-md hover:bg-orange-400'>Login</button>
-            <button className='bg-orange-300 text-gray-800 px-4 py-2 rounded-md hover:bg-orange-400'>Sign Up</button>
-        </div>
-    </div>
-  )
-}
+    <nav className="bg-black text-white px-6 py-4 flex items-center justify-between">
 
-export default Navbar
+      {/* Logo */}
+      <h1 className="text-2xl font-bold text-orange-400">
+        Eateny
+      </h1>
+
+      {/* Nav Links */}
+      <div className="flex gap-6 text-sm md:text-base">
+        <Link href="/" className="hover:text-orange-400 transition">Home</Link>
+        <Link href="/menu" className="hover:text-orange-400 transitio">Menu</Link>
+        <Link href="/about" className="hover:text-orange-400 transition">About</Link>
+        <Link href="/contact" className="hover:text-orange-400 transition">Contact</Link>
+      </div>
+
+      {/* Button */}
+      <button className="bg-orange-500 px-4 py-2 rounded-lg hover:bg-orange-600 transition cursor-pointer
+      ">
+        Book Table
+      </button>
+
+    </nav>
+  );
+}
