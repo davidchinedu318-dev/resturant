@@ -35,7 +35,7 @@ const Page = () => {
     <div>
       <Hero />
       <section className='bg-gray-100 px-4 md:px-8 lg:px-12 py-12'>
-        <h2 className='text-3xl font-bold text-center text-gray-800 mb-8'>Our Menu</h2>
+        <h2 className='text-3xl font-bold text-center text-gray-800 mb-8'>Featured Menu</h2>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
           {foods.slice(0, 6).map(food => (
             <MenuCard key={food.id} id={food.id} name={food.name} price={food.price} image={food.image} />

@@ -10,7 +10,7 @@ export default function FloatingCart() {
 
   return (
     <>
-    <div className="fixed bottom-6 right-6 z-6">
+    <div className="fixed bottom-6 right-4 md:right z-6">
       <button 
         onClick={() => setIsOpen(true)}
         className="relative right-6 bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-full shadow-lg cursor-pointer transition z-50 e">

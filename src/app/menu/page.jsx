@@ -40,7 +40,7 @@ export default function MenuPage() {
       
       {/* Page Header */}
       <div className="text-center mb-10">
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">Our Full Menu</h1>
+        <h1 className="text-4xl font-bold text-gray-800 mb-2"> Full Menu</h1>
         <p className="text-gray-500">Explore all our dishes — local, continental and more</p>
       </div>
 
