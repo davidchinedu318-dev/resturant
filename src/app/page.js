@@ -4,6 +4,7 @@ import Hero from './Components/Hero'
 import MenuCard from './Components/menucard'
 import SearchBar from './Components/SearchBar'
 import WhyEateny from './Components/WhyEateny'
+import AboutPreview from './Components/AboutPreview'
 
 const foods = [
   { id: 1, name: "Jollof Rice", price: 2500, image: "/images/jellof-rice.jpg" },
@@ -48,6 +49,7 @@ const Page = () => {
         </div>
       </section>
       <WhyEateny />
+      <AboutPreview/>
     </div>
   )
 }
