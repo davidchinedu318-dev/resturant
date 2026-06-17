@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react"
 
 export default function Navbar() {
-  const [ isOpen, setIsOpen ] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   return (
     <nav className="sticky top-0 z-50 bg-black text-white px-6 py-4">
       <div className="flex items-center justify-between">
@@ -28,7 +28,7 @@ export default function Navbar() {
         </Link>
         {/* mobile harmburger */}
         <button className="md:hidden cursor-pointer"
-         onClick={() => setIsOpen(!isOpen)}>
+          onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <X size={24} /> : <Menu size={24} />}
 
         </button>
@@ -36,15 +36,16 @@ export default function Navbar() {
 
 
       {/* mobile menu */}
-       {isOpen && (
+      {isOpen && (
         <div className="md:hidden mt-4 flex flex-col gap-4 pb-4">
           <Link href="/" className="hover:text-orange-400 transition" onClick={() => setIsOpen(false)}>Home</Link>
           <Link href="/menu" className="hover:text-orange-400 transition" onClick={() => setIsOpen(false)}>Menu</Link>
           <Link href="/about" className="hover:text-orange-400 transition" onClick={() => setIsOpen(false)}>About</Link>
           <Link href="/contact" className="hover:text-orange-400 transition" onClick={() => setIsOpen(false)}>Contact</Link>
-          <button className="bg-orange-500 px-4 py-2 rounded-lg hover:bg-orange-600 transition cursor-pointer w-full">
+          <Link href="/login"
+            className="bg-orange-500 px-4 py-2 rounded-lg hover:bg-orange-600 transition cursor-pointer w-full">
             Book Table
-          </button>
+          </Link>
         </div>
       )}
     </nav>
