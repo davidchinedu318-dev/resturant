@@ -42,7 +42,7 @@ export default function Navbar() {
           <Link href="/menu" className="hover:text-orange-400 transition" onClick={() => setIsOpen(false)}>Menu</Link>
           <Link href="/about" className="hover:text-orange-400 transition" onClick={() => setIsOpen(false)}>About</Link>
           <Link href="/contact" className="hover:text-orange-400 transition" onClick={() => setIsOpen(false)}>Contact</Link>
-          <Link href="/login"
+          <Link href="/login" onClick={() => setIsOpen(false)}
             className="bg-orange-500 px-4 py-2 rounded-lg hover:bg-orange-600 transition cursor-pointer w-full">
             Book Table
           </Link>
