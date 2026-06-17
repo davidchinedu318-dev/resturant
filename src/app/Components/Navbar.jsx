@@ -22,10 +22,10 @@ export default function Navbar() {
         </div>
 
         {/* Button */}
-        <button className="hidden md:block bg-orange-500 px-4 py-2 rounded-lg hover:bg-orange-600 transition cursor-pointer
+        <Link href="/login" className="hidden md:block bg-orange-500 px-4 py-2 rounded-lg hover:bg-orange-600 transition cursor-pointer
       ">
           Book Table
-        </button>
+        </Link>
         {/* mobile harmburger */}
         <button className="md:hidden cursor-pointer"
          onClick={() => setIsOpen(!isOpen)}>
