@@ -15,5 +15,6 @@ export default function Toast({ message, show, onClose }) {
       <CheckCircle size={20} className="text-orange-500" />
       <span className="text-sm font-semibold">{message}</span>
     </div>
+    
   )
 }
