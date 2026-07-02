@@ -1,9 +1,16 @@
 "use client"
 import { useState, useEffect } from "react"
 import { LayoutDashboard, UtensilsCrossed, ShoppingBag, Users, Settings, LogOut } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("overview")
+  const router = useRouter();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    router.replace("/admin");
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -13,7 +20,8 @@ export default function AdminDashboard() {
         <h1 className="text-xl font-bold text-orange-400">Eateny Admin</h1>
         <div className="flex items-center gap-4">
           <span className="text-gray-400 text-sm">Welcome, Admin</span>
-          <button className="bg-orange-500 hover:bg-orange-600 text-white text-sm px-4 py-2 rounded-lg cursor-pointer transition flex items-center gap-2">
+          <button onClick={handleLogout}
+            className="bg-orange-500 hover:bg-orange-600 text-white text-sm px-4 py-2 rounded-lg cursor-pointer transition flex items-center gap-2">
             <LogOut size={16} />
             Logout
           </button>
@@ -34,8 +42,8 @@ export default function AdminDashboard() {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-4 py-4 text-sm font-semibold border-b-2 transition cursor-pointer whitespace-nowrap ${activeTab === tab.id
-                  ? "border-orange-500 text-orange-500"
-                  : "border-transparent text-gray-500 hover:text-gray-800"
+                ? "border-orange-500 text-orange-500"
+                : "border-transparent text-gray-500 hover:text-gray-800"
                 }`}>
               {tab.icon}
               {tab.label}
@@ -57,9 +65,9 @@ export default function AdminDashboard() {
   )
 }
 
-// ─── Overview Tab ───────────────────────────────────────────
+// Overview Tab 
 function OverviewTab() {
-  // TODO: fetch real stats from backend
+  //  fetch real stats from backend
   const stats = [
     { label: "Total Orders", value: "128", color: "bg-orange-500" },
     { label: "Total Foods", value: "17", color: "bg-black" },
@@ -114,8 +122,8 @@ function OverviewTab() {
                   <td className="py-3 font-bold text-gray-800">{order.total}</td>
                   <td className="py-3">
                     <span className={`px-3 py-1 rounded-full text-xs font-bold ${order.status === "Delivered" ? "bg-green-100 text-green-600" :
-                        order.status === "Pending" ? "bg-yellow-100 text-yellow-600" :
-                          "bg-blue-100 text-blue-600"
+                      order.status === "Pending" ? "bg-yellow-100 text-yellow-600" :
+                        "bg-blue-100 text-blue-600"
                       }`}>
                       {order.status}
                     </span>
@@ -343,7 +351,7 @@ function FoodsTab() {
   )
 }
 
-// ─── Orders Tab ──────────────────────────────────────────────
+// Orders Tab
 function OrdersTab() {
   // TODO: fetch all orders from backend/database
   const orders = [
@@ -386,8 +394,8 @@ function OrdersTab() {
                   <td className="py-3">
                     {/* TODO: connect to PATCH /api/orders/:id endpoint */}
                     <select className={`text-xs font-bold px-2 py-1 rounded-lg border-none outline-none cursor-pointer ${order.status === "Delivered" ? "bg-green-100 text-green-600" :
-                        order.status === "Pending" ? "bg-yellow-100 text-yellow-600" :
-                          "bg-blue-100 text-blue-600"
+                      order.status === "Pending" ? "bg-yellow-100 text-yellow-600" :
+                        "bg-blue-100 text-blue-600"
                       }`}>
                       <option>Pending</option>
                       <option>Processing</option>
@@ -410,7 +418,7 @@ function OrdersTab() {
   )
 }
 
-// ─── Users Tab ───────────────────────────────────────────────
+// Users Tab
 function UsersTab() {
   // TODO: fetch all users from backend/database
   const users = [
@@ -462,7 +470,7 @@ function UsersTab() {
   )
 }
 
-// ─── Settings Tab ────────────────────────────────────────────
+//  Settings Tab 
 function SettingsTab() {
   return (
     <div>
