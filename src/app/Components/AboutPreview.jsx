@@ -7,7 +7,7 @@ export default function AboutPreview() {
         
         {/* Text */}
         <div className="flex-1">
-          <p className="text-black text-sm uppercase tracking-widest mb-3">Who We Are</p>
+          <p className="text-orange-500 text-sm uppercase tracking-widest mb-3">Who We Are</p>
           <h2 className="text-4xl font-bold mb-4">We Deliver More Than Just Food</h2>
           <p className="text-gray-400 text-lg leading-relaxed mb-6">
             Eateny was born out of a simple frustration — great food was everywhere but getting it delivered fast and fresh was a challenge. We set out to change that.
