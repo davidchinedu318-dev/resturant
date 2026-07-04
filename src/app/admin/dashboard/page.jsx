@@ -156,7 +156,7 @@ function FoodsTab() {
 
   const fetchFoods = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/foods')
+      const res = await fetch('https://resturant-dzac.onrender.com/api/foods')
       const data = await res.json()
       setFoods(data)
       setLoading(false)
@@ -173,7 +173,7 @@ function FoodsTab() {
   const handleAdd = async () => {
     if (!form.name || !form.price) return
     try {
-      const res = await fetch('http://localhost:5000/api/foods', {
+      const res = await fetch('https://resturant-dzac.onrender.com/api/foods', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form)
@@ -195,7 +195,7 @@ function FoodsTab() {
 
   const handleUpdate = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/foods/${editFood.id}`, {
+      const res = await fetch(`https://resturant-dzac.onrender.com/api/foods/${editFood.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form)
@@ -212,7 +212,7 @@ function FoodsTab() {
 
   const handleDelete = async (id) => {
     try {
-      await fetch(`http://localhost:5000/api/foods/${id}`, { method: 'DELETE' })
+      await fetch(`https://resturant-dzac.onrender.com/api/foods/${id}`, { method: 'DELETE' })
       setFoods(foods.filter(f => f.id !== id))
     } catch (error) {
       console.error('Error deleting food:', error)
@@ -277,7 +277,7 @@ function FoodsTab() {
                   if (!file) return
                   const formData = new FormData()
                   formData.append('image', file)
-                  const res = await fetch('http://localhost:5000/api/upload', {
+                  const res = await fetch('https://resturant-dzac.onrender.com/api/upload', {
                     method: 'POST',
                     body: formData
                   })

@@ -12,7 +12,7 @@ export default function MenuPage() {
   const [activeCategory, setActiveCategory] = useState("All")
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/foods')
+    fetch('https://resturant-dzac.onrender.com/api/foods')
       .then(res => res.json())
       .then(data => {
         setFoods(data)

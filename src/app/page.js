@@ -10,7 +10,7 @@ const Page = () => {
   const [loading, setLoading] = useState(true)  
 
 useEffect(() => {
-  fetch('http://localhost:5000/api/foods')
+  fetch('https://resturant-dzac.onrender.com/api/foods')
     .then(res => res.json())
     .then(data => setFoods(data.slice(0, 6)))
 }, [])
