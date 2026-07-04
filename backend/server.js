@@ -1,7 +1,8 @@
 const express = require('express')
 const cors = require('cors')
 const multer = require('multer')
-const path = require('path')
+const { v2: cloudinary } = require('cloudinary')
+const { CloudinaryStorage } = require('multer-storage-cloudinary')
 require('dotenv').config()
 
 const app = express()
@@ -9,16 +10,19 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-// serve uploaded images as static files
-app.use('/uploads', express.static('uploads'))
+// configure cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+})
 
-// configure where images are saved
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/')
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname))
+// configure multer to upload directly to cloudinary
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'eateny',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp']
   }
 })
 
@@ -27,7 +31,7 @@ const upload = multer({ storage })
 // image upload endpoint
 app.post('/api/upload', upload.single('image'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' })
-  res.json({ imageUrl: `http://localhost:5000/uploads/${req.file.filename}` })
+  res.json({ imageUrl: req.file.path })
 })
 
 const foodRoutes = require('./routes/foods')
