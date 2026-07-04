@@ -145,6 +145,7 @@ function FoodsTab() {
   const [foods, setFoods] = useState([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [deleting, setDeleting] = useState(null)
 
   const [form, setForm] = useState({
     name: "", price: "", category: "Nigerian", status: "Available", description: "", image: ""
@@ -170,27 +171,27 @@ function FoodsTab() {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
-  
+
   const handleAdd = async () => {
-  if (!form.name || !form.price) return
-  if (saving) return
-  setSaving(true)
-  try {
-    const res = await fetch('https://resturant-dzac.onrender.com/api/foods', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form)
-    })
-    const newFood = await res.json()
-    setFoods([newFood, ...foods])
-    setForm({ name: "", price: "", category: "Nigerian", status: "Available", description: "", image: "" })
-    setShowForm(false)
-  } catch (error) {
-    console.error('Error adding food:', error)
-  } finally {
-    setSaving(false)
+    if (!form.name || !form.price) return
+    if (saving) return
+    setSaving(true)
+    try {
+      const res = await fetch('https://resturant-dzac.onrender.com/api/foods', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form)
+      })
+      const newFood = await res.json()
+      setFoods([newFood, ...foods])
+      setForm({ name: "", price: "", category: "Nigerian", status: "Available", description: "", image: "" })
+      setShowForm(false)
+    } catch (error) {
+      console.error('Error adding food:', error)
+    } finally {
+      setSaving(false)
+    }
   }
-}
 
 
   const handleEdit = (food) => {
@@ -216,14 +217,21 @@ function FoodsTab() {
     }
   }
 
+
+
   const handleDelete = async (id) => {
+    if (deleting) return
+    setDeleting(id)
     try {
       await fetch(`https://resturant-dzac.onrender.com/api/foods/${id}`, { method: 'DELETE' })
       setFoods(foods.filter(f => f.id !== id))
     } catch (error) {
       console.error('Error deleting food:', error)
+    } finally {
+      setDeleting(null)
     }
   }
+
 
   if (loading) return <p className="text-gray-400 text-center py-10">Loading foods...</p>
 
@@ -343,9 +351,11 @@ function FoodsTab() {
                         className="bg-blue-100 text-blue-600 hover:bg-blue-200 text-xs font-bold px-3 py-1 rounded-lg cursor-pointer transition">
                         Edit
                       </button>
-                      <button onClick={() => handleDelete(food.id)}
-                        className="bg-red-100 text-red-500 hover:bg-red-200 text-xs font-bold px-3 py-1 rounded-lg cursor-pointer transition">
-                        Delete
+                      <button
+                        onClick={() => handleDelete(food.id)}
+                        disabled={deleting === food.id}
+                        className="bg-red-100 text-red-500 hover:bg-red-200 text-xs font-bold px-3 py-1 rounded-lg cursor-pointer transition disabled:opacity-50">
+                        {deleting === food.id ? "Deleting..." : "Delete"}
                       </button>
                     </div>
                   </td>

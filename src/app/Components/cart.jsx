@@ -15,8 +15,12 @@ export default function Cart({ isOpen, onClose }) {
 
   const [showToast, setShowToast] = useState(false)
   const [toastMessage, setToastMessage] = useState("")
+  const [checkingOut, setCheckingOut] = useState(false)
 
-  const handleCheckout = () => {
+const handleCheckout = () => {
+  setCheckingOut(true)
+
+  setTimeout(() => {
     const isLoggedIn = false
 
     if (!isLoggedIn) {
@@ -24,6 +28,7 @@ export default function Cart({ isOpen, onClose }) {
       setShowToast(true)
 
       setTimeout(() => {
+        setCheckingOut(false)
         onClose()
         router.push("/login")
       }, 2000)
@@ -31,10 +36,11 @@ export default function Cart({ isOpen, onClose }) {
       return
     }
 
+    setCheckingOut(false)
     onClose()
     router.push("/checkout")
-  }
-
+  }, 1500)
+}
   return (
     <>
       {/* Dark overlay */}
@@ -98,8 +104,11 @@ export default function Cart({ isOpen, onClose }) {
               <span className="font-bold text-gray-800">Total</span>
               <span className="font-bold text-orange-500">₦{total.toLocaleString()}</span>
             </div>
-            <button onClick={handleCheckout} className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg cursor-pointer transition">
-              Proceed to Checkout
+            <button
+              onClick={handleCheckout}
+              disabled={checkingOut}
+              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-lg cursor-pointer transition disabled:opacity-75">
+              {checkingOut ? "Proceeding to checkout..." : "Proceed to Checkout"}
             </button>
           </div>
         )}
