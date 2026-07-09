@@ -37,7 +37,7 @@ export default function Footer() {
             </li>
             <li className="flex items-center gap-2 text-gray-400 text-sm">
               <Phone size={16} className="text-orange-400 shrink-0" />
-              +234 801 234 5678
+              08133368132
             </li>
             <li className="flex items-center gap-2 text-gray-400 text-sm">
               <Mail size={16} className="text-orange-400 shrink-0" />

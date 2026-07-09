@@ -23,9 +23,10 @@ export default function Hero() {
           From local favourites to international cuisine — order fresh meals delivered straight to your door.
         </p>
         <div className="flex gap-4 justify-center">
-          <button className="bg-orange-500 hover:bg-orange-600 transition cursor-pointer px-8 py-3 rounded-lg font-bold text-white">
+          <Link href="/login"
+           className="bg-orange-500 hover:bg-orange-600 transition cursor-pointer px-8 py-3 rounded-lg font-bold text-white">
             Order Now
-          </button>
+          </Link>
           <Link href="/menu"
           className="border border-white hover:bg-white hover:text-black transition cursor-pointer px-8 py-3 rounded-lg font-bold">
             View Menu

@@ -58,19 +58,19 @@ export default function AboutPage() {
             <section className="bg-black text-white py-16 px-6">
                 <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                     <div>
-                        <h3 className="text-4xl font-bold text-orange-400">500+</h3>
+                        <h3 className="text-4xl font-bold text-orange-400">50+</h3>
                         <p className="text-gray-400 mt-1">Dishes Available</p>
                     </div>
                     <div>
-                        <h3 className="text-4xl font-bold text-orange-400">10k+</h3>
+                        <h3 className="text-4xl font-bold text-orange-400">200+</h3>
                         <p className="text-gray-400 mt-1">Happy Customers</p>
                     </div>
                     <div>
-                        <h3 className="text-4xl font-bold text-orange-400">30min</h3>
+                        <h3 className="text-4xl font-bold text-orange-400">30min-1hr</h3>
                         <p className="text-gray-400 mt-1">Delivery Within Branch</p>
                     </div>
                     <div>
-                        <h3 className="text-4xl font-bold text-orange-400">5★</h3>
+                        <h3 className="text-4xl font-bold text-orange-400">4★</h3>
                         <p className="text-gray-400 mt-1">Average Rating</p>
                     </div>
                 </div>
