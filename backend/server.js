@@ -10,6 +10,25 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
+// health endpoint — keeps server warm
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date() })
+})
+
+// simple in-memory cache
+let foodsCache = null
+let cacheTime = null
+const CACHE_DURATION = 24 * 60 * 60 * 1000 // 24 hours
+
+// clear cache when food is added edited or deleted
+app.use('/api/foods', (req, res, next) => {
+  if (req.method !== 'GET') {
+    foodsCache = null
+    cacheTime = null
+  }
+  next()
+})
+
 // configure cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
