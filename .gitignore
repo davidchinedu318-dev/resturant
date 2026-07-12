@@ -42,3 +42,5 @@ next-env.d.ts
 
 backend/.env
 backend/uploads
+
+.env.local
