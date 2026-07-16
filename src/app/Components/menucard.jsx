@@ -1,9 +1,10 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Heart, Plus } from "lucide-react"
-import { useCart } from "../context/CartContext"
-import Toast from "./Toast"
+import { useState } from "react";
+import { Heart, Plus } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useCart } from "../context/CartContext";
+import Toast from "./Toast";
 
 export default function MenuCard({
   id,
@@ -12,28 +13,80 @@ export default function MenuCard({
   image,
   description,
   status,
+  favorites = [],
+  setFavorites = () => {},
 }) {
-  const { addToCart } = useCart()
 
-  const [showToast, setShowToast] = useState(false)
-  const [isFavorite, setIsFavorite] = useState(false)
+  const { data: session } = useSession();
+  const { addToCart } = useCart();
+
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState(""); 
+
+  const isFavorite = favorites.includes(id);
 
   const handleAddToCart = () => {
-    addToCart({ id, name, price, image })
-    setShowToast(true)
+    addToCart({
+      id,
+      name,
+      price,
+      image,
+    });
+
+    setToastMessage(`${name} added to cart`);
+    setShowToast(true);
+  };
+
+ const handleFavorite = async () => {
+  if (!session) {
+    setToastMessage("Please login first");
+    setShowToast(true);
+    return;
   }
+
+  if (isFavorite) {
+    const response = await fetch(`/api/favorites/${id}`, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      setFavorites((prev) =>
+        prev.filter((foodId) => foodId !== id)
+      );
+
+      setToastMessage(`${name} removed from favorites`);
+      setShowToast(true);
+    }
+  } else {
+    const response = await fetch("/api/favorites", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        foodId: id,
+      }),
+    });
+
+    if (response.ok) {
+      setFavorites((prev) => [...prev, id]);
+
+      setToastMessage(`${name} added to favorites`);
+      setShowToast(true);
+    }
+  }
+};
 
   return (
     <>
-      <Toast
-        message={`${name} added to cart`}
+     <Toast
+        message={toastMessage}
         show={showToast}
         onClose={() => setShowToast(false)}
       />
 
       <div className="bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
 
-        {/* Image */}
         <div className="relative">
           <img
             src={image || "/images/placeholder.jpg"}
@@ -41,7 +94,6 @@ export default function MenuCard({
             className="w-full h-56 object-cover"
           />
 
-          {/* Status Badge */}
           {status && (
             <span
               className={`absolute top-3 right-3 text-xs font-semibold px-3 py-1 rounded-full ${
@@ -55,7 +107,6 @@ export default function MenuCard({
           )}
         </div>
 
-        {/* Content */}
         <div className="p-5">
 
           <h2 className="text-lg font-bold text-gray-800">
@@ -72,10 +123,8 @@ export default function MenuCard({
             ₦{Number(price).toLocaleString()}
           </p>
 
-          {/* Action Buttons */}
           <div className="flex items-center justify-between mt-6">
 
-            {/* Add To Cart */}
             <button
               onClick={handleAddToCart}
               disabled={status === "Unavailable"}
@@ -88,9 +137,8 @@ export default function MenuCard({
               <Plus size={24} strokeWidth={3} />
             </button>
 
-            {/* Favorite */}
             <button
-              onClick={() => setIsFavorite(!isFavorite)}
+              onClick={handleFavorite}
               className="w-12 h-12 rounded-full bg-gray-100 hover:bg-gray-200 hover:scale-110 active:scale-95 flex items-center justify-center transition-all duration-300 cursor-pointer"
             >
               <Heart
@@ -108,5 +156,5 @@ export default function MenuCard({
         </div>
       </div>
     </>
-  )
+  );
 }

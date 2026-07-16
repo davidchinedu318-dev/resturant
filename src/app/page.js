@@ -1,4 +1,5 @@
 "use client"
+import { useSession } from "next-auth/react";
 import { useState, useEffect } from 'react'
 import Hero from './Components/Hero'
 import MenuCard from './Components/menucard'
@@ -20,24 +21,39 @@ function SkeletonCard() {
 }
 
 const Page = () => {
+
+  const { data: session } = useSession();
+  const [favorites, setFavorites] = useState([]);
+
   const [foods, setFoods] = useState([])
   const [loading, setLoading] = useState(true)
 
- useEffect(() => {
-  const minLoadTime = new Promise(resolve => setTimeout(resolve, 3000))
-  const fetchFoods = fetch('https://resturant-dzac.onrender.com/api/foods')
-    .then(res => res.json())
+  useEffect(() => {
+    const minLoadTime = new Promise(resolve => setTimeout(resolve, 1000))
+    const fetchFoods = fetch('https://resturant-dzac.onrender.com/api/foods')
+      .then(res => res.json())
 
-  Promise.all([minLoadTime, fetchFoods])
-    .then(([_, data]) => {
-      setFoods(data.slice(0, 6))
-      setLoading(false)
-    })
-    .catch(err => {
-      console.error(err)
-      setLoading(false)
-    })
-}, [])
+    Promise.all([minLoadTime, fetchFoods])
+      .then(([_, data]) => {
+        setFoods(data.slice(0, 6))
+        setLoading(false)
+      })
+      .catch(err => {
+        console.error(err)
+        setLoading(false)
+      })
+  }, [])
+
+  useEffect(() => {
+    if (!session) return;
+
+    fetch("/api/favorites")
+      .then((res) => res.json())
+      .then((data) => {
+        setFavorites(data.map((item) => item.food_id));
+      })
+      .catch((err) => console.error(err));
+  }, [session]);
 
   return (
     <div>
@@ -64,6 +80,8 @@ const Page = () => {
                 image={food.image}
                 description={food.description}
                 status={food.status}
+                favorites={favorites}
+                setFavorites={setFavorites}
               />
             ))
           )}

@@ -3,6 +3,7 @@ import { useState } from "react"
 import { Eye, EyeOff, Lock, Mail, User, Phone } from "lucide-react"
 import { FaFacebook, FaGoogle, FaGithub, FaLinkedin } from "react-icons/fa6"
 import { signIn } from "next-auth/react"
+import Toast from "../Components/Toast"
 
 export default function AuthPage() {
   const [isSignUp, setIsSignUp] = useState(false)
@@ -35,7 +36,8 @@ export default function AuthPage() {
 
     const data = await response.json();
 
-    alert(data.message);
+    setToastMessage(data.message);
+    setShowToast(true);
 
     if (response.ok) {
       setSignupName("");
@@ -43,35 +45,43 @@ export default function AuthPage() {
       setSignupPassword("");
 
       // Switch back to Sign In panel
-      setIsSignUp(false);
+      setTimeout(() => {
+        setIsSignUp(false);
+      }, 2000);
+      
     }
   };
 
-
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
   const handleLogin = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const result = await signIn("credentials", {
-    email: loginEmail,
-    password: loginPassword,
-    redirect: false,
-  });
+    const result = await signIn("credentials", {
+      email: loginEmail,
+      password: loginPassword,
+      redirect: false,
+    });
 
-  if (result?.error) {
-    alert("Invalid email or password");
-    return;
-  }
+    if (result?.error) {
+      setToastMessage("Invalid email or password");
+      setShowToast(true);
+      return;
+    }
 
-  alert("Login successful!");
+    setToastMessage("Login successful!");
+    setShowToast(true);
 
-  // Clear the form
-  setLoginEmail("");
-  setLoginPassword("");
+    // Clear the form
+    setLoginEmail("");
+    setLoginPassword("");
 
-  // Redirect to your homepage
-  window.location.href = "/";
-};
+    // Redirect to your homepage
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 2000);
+  };
 
   return (
     <>
@@ -299,6 +309,11 @@ export default function AuthPage() {
 
         </div>
       </div>
+      <Toast
+        message={toastMessage}
+        show={showToast}
+        onClose={() => setShowToast(false)}
+      />
     </>
   )
 }
