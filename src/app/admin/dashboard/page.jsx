@@ -267,7 +267,7 @@ function FoodsTab() {
               <select name="category" value={form.category} onChange={handleChange}
                 className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:border-orange-500 bg-gray-50 text-sm">
                 <option>Nigerian</option>
-                <option>Continental</option>
+                <option>interContinental</option>
                 <option>Fast Food</option>
                 <option>Protein</option>
                 <option>Dessert</option>
