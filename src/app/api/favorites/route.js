@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { NextResponse } from "next/server";
 
-// GET all favorites for the logged-in user
+//to GET favourites 
 export async function GET() {
   const session = await getServerSession(authOptions);
 
@@ -12,14 +12,23 @@ export async function GET() {
   }
 
   const favorites = await sql`
-    SELECT food_id
+    SELECT
+      foods.id,
+      foods.name,
+      foods.price,
+      foods.image,
+      foods.description,
+      foods.status,
+      foods.category
     FROM favorites
-    WHERE user_email = ${session.user.email}
+    JOIN foods
+      ON favorites.food_id = foods.id
+    WHERE favorites.user_email = ${session.user.email}
+    ORDER BY favorites.created_at DESC
   `;
 
   return NextResponse.json(favorites);
 }
-
 // Add a favorite
 export async function POST(request) {
   const session = await getServerSession(authOptions);

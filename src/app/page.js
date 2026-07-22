@@ -50,7 +50,7 @@ const Page = () => {
     fetch("/api/favorites")
       .then((res) => res.json())
       .then((data) => {
-        setFavorites(data.map((item) => item.food_id));
+        setFavorites(data);
       })
       .catch((err) => console.error(err));
   }, [session]);

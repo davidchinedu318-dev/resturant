@@ -38,15 +38,16 @@ export default function MenuPage() {
       });
   }, []);
 
-  // Fetch logged-in user's favorites
+  // Fetch logged-in users favorites
   useEffect(() => {
     if (!session) return;
 
-    fetch("/api/favorites")
-      .then((res) => res.json())
-      .then((data) => {
-        setFavorites(data.map((item) => item.food_id));
-      });
+   fetch("/api/favorites")
+  .then((res) => res.json())
+  .then((data) => {
+    setFavorites(data);
+  })
+  .catch((err) => console.error(err));
   }, [session]);
 
   const filteredFoods = foods.filter((food) => {
@@ -93,11 +94,10 @@ export default function MenuPage() {
           <button
             key={category}
             onClick={() => setActiveCategory(category)}
-            className={`px-6 py-2 rounded-full font-semibold transition cursor-pointer text-sm ${
-              activeCategory === category
+            className={`px-6 py-2 rounded-full font-semibold transition cursor-pointer text-sm ${activeCategory === category
                 ? "bg-orange-500 text-white"
                 : "bg-white border border-gray-200 hover:bg-orange-100"
-            }`}
+              }`}
           >
             {category}
           </button>
@@ -114,6 +114,7 @@ export default function MenuPage() {
             description={food.description}
             status={food.status}
             price={food.price}
+            category={food.category}
             favorites={favorites}
             setFavorites={setFavorites}
           />

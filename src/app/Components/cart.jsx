@@ -3,10 +3,12 @@ import { useCart } from "../context/CartContext"
 import { Trash2, X } from 'lucide-react'
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { useSession } from "next-auth/react";
 import Toast from "./Toast"
 
 
 export default function Cart({ isOpen, onClose }) {
+  const { data: session } = useSession();
   const { cartItems, removeFromCart, updateQuantity, totalItems } = useCart()
 
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
@@ -17,30 +19,31 @@ export default function Cart({ isOpen, onClose }) {
   const [toastMessage, setToastMessage] = useState("")
   const [checkingOut, setCheckingOut] = useState(false)
 
-const handleCheckout = () => {
-  setCheckingOut(true)
+ const handleCheckout = () => {
+  setCheckingOut(true);
+
+  // User not logged in
+  if (!session) {
+    setToastMessage("Please login to continue");
+    setShowToast(true);
+
+    setTimeout(() => {
+      setCheckingOut(false);
+      onClose(); // Close cart
+      router.push("/login");
+    }, 2000);
+
+    return;
+  }
+
+  // User is logged in
+  onClose(); // Close cart immediately
 
   setTimeout(() => {
-    const isLoggedIn = false
-
-    if (!isLoggedIn) {
-      setToastMessage("Please login to continue")
-      setShowToast(true)
-
-      setTimeout(() => {
-        setCheckingOut(false)
-        onClose()
-        router.push("/login")
-      }, 2000)
-
-      return
-    }
-
-    setCheckingOut(false)
-    onClose()
-    router.push("/checkout")
-  }, 1500)
-}
+    router.push("/checkout");
+    setCheckingOut(false);
+  }, 3000); // Small delay so the cart animation finishes
+};
   return (
     <>
       {/* Dark overlay */}

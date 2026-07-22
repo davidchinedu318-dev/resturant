@@ -13,17 +13,20 @@ export default function MenuCard({
   image,
   description,
   status,
+  category,
   favorites = [],
   setFavorites = () => {},
+  removeFavoriteCard = () => {},
 }) {
-
   const { data: session } = useSession();
   const { addToCart } = useCart();
 
   const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState(""); 
+  const [toastMessage, setToastMessage] = useState("");
 
-  const isFavorite = favorites.includes(id);
+  const isFavorite = favorites.some((fav) =>
+    typeof fav === "object" ? fav.id === id : fav === id
+  );
 
   const handleAddToCart = () => {
     addToCart({
@@ -37,27 +40,36 @@ export default function MenuCard({
     setShowToast(true);
   };
 
- const handleFavorite = async () => {
-  if (!session) {
-    setToastMessage("Please login first");
-    setShowToast(true);
-    return;
-  }
-
-  if (isFavorite) {
-    const response = await fetch(`/api/favorites/${id}`, {
-      method: "DELETE",
-    });
-
-    if (response.ok) {
-      setFavorites((prev) =>
-        prev.filter((foodId) => foodId !== id)
-      );
-
-      setToastMessage(`${name} removed from favorites`);
+  const handleFavorite = async () => {
+    if (!session) {
+      setToastMessage("Please login first");
       setShowToast(true);
+      return;
     }
-  } else {
+
+    // REMOVE FAVORITE
+    if (isFavorite) {
+      const response = await fetch(`/api/favorites/${id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setFavorites((prev) =>
+          prev.filter((fav) =>
+            typeof fav === "object" ? fav.id !== id : fav !== id
+          )
+        );
+
+        removeFavoriteCard(id);
+
+        setToastMessage(`${name} removed from favorites`);
+        setShowToast(true);
+      }
+
+      return;
+    }
+
+    // ADD FAVORITE
     const response = await fetch("/api/favorites", {
       method: "POST",
       headers: {
@@ -69,17 +81,27 @@ export default function MenuCard({
     });
 
     if (response.ok) {
-      setFavorites((prev) => [...prev, id]);
+      setFavorites((prev) => [
+        ...prev,
+        {
+          id,
+          name,
+          price,
+          image,
+          description,
+          status,
+          category,
+        },
+      ]);
 
       setToastMessage(`${name} added to favorites`);
       setShowToast(true);
     }
-  }
-};
+  };
 
   return (
     <>
-     <Toast
+      <Toast
         message={toastMessage}
         show={showToast}
         onClose={() => setShowToast(false)}
