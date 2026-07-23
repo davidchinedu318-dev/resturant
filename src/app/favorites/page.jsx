@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import MenuCard from "../Components/menucard";
+import { ChefHat } from "lucide-react";
 
 export default function FavoritesPage() {
   const [favoriteFoods, setFavoriteFoods] = useState([]);
@@ -42,7 +43,7 @@ export default function FavoritesPage() {
       style={{ backgroundColor: "#FDF6EC" }}
     >
       <h1 className="text-4xl font-bold mb-8">
-        ❤️ My Favorites
+        My Favorites
       </h1>
 
       {favoriteFoods.length === 0 ? (
@@ -77,9 +78,10 @@ export default function FavoritesPage() {
         </div>
       )}
 
-      <h2 className="text-3xl font-bold mt-20 mb-8">
-        🍽️ You May Also Like
-      </h2>
+    <h2 className="flex items-center gap-2 text-3xl font-bold mt-20 mb-8">
+  <ChefHat className="w-8 h-8 text-orange-500" />
+  You May Also Like
+</h2>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
         {recommendedFoods.map((food) => (

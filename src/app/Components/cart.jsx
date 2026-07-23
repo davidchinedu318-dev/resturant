@@ -22,27 +22,29 @@ export default function Cart({ isOpen, onClose }) {
  const handleCheckout = () => {
   setCheckingOut(true);
 
-  // User not logged in
   if (!session) {
     setToastMessage("Please login to continue");
     setShowToast(true);
-
-    setTimeout(() => {
+    
+  // User not logged in
+      setTimeout(() => {
       setCheckingOut(false);
-      onClose(); // Close cart
+      onClose(); // close cart animation
       router.push("/login");
     }, 2000);
 
     return;
   }
 
-  // User is logged in
-  onClose(); // Close cart immediately
+  // Logged in
+  setToastMessage("Redirecting to checkout...");
+  setShowToast(true);
 
   setTimeout(() => {
-    router.push("/checkout");
     setCheckingOut(false);
-  }, 3000); // Small delay so the cart animation finishes
+    onClose(); // close cart first
+    router.push("/checkout");
+  }, 2000);
 };
   return (
     <>
