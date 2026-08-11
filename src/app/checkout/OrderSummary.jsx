@@ -1,6 +1,7 @@
 "use client";
 
 import { useCart } from "../context/CartContext";
+import { Truck } from "lucide-react"
 
 export default function OrderSummary() {
   const { cartItems } = useCart();
@@ -95,8 +96,8 @@ export default function OrderSummary() {
 
           <div className="mt-6 p-4 bg-orange-50 rounded-2xl">
 
-            <p className="text-sm text-gray-600">
-              🚚 Estimated Delivery
+            <p className="flex items-center gap-2 text-sm text-gray-600">
+              <Truck className="text-orange-500\\" size={20}/> Estimated Delivery
             </p>
 
             <p className="font-semibold text-orange-600">

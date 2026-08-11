@@ -1,8 +1,22 @@
+"use client";
+
+import { useState } from "react";
 import CheckoutForm from "./CheckoutForm";
 import OrderSummary from "./OrderSummary";
 import PaymentMethod from "./PaymentMethod";
 
 export default function CheckoutPage() {
+  const [deliveryData, setDeliveryData] = useState({
+    phone: "",
+    city: "",
+    road: "",
+    street: "",
+    manualRoad: "",
+    manualStreet: "",
+    houseAddress: "",
+    deliveryNote: "",
+  });
+
   return (
     <div
       className="min-h-screen px-4 md:px-8 lg:px-12 py-12"
@@ -23,13 +37,17 @@ export default function CheckoutPage() {
         <div className="grid lg:grid-cols-3 gap-8">
 
           {/* Left */}
-          <div className="lg:col-span-2">
-            <CheckoutForm />
+          <div className="lg:col-span-2 space-y-6">
 
-            {/* Desktop only */}
-            <div className="hidden lg:block mt-6">
-              <PaymentMethod />
-            </div>
+            <CheckoutForm
+              deliveryData={deliveryData}
+              setDeliveryData={setDeliveryData}
+            />
+
+            <PaymentMethod
+              deliveryData={deliveryData}
+            />
+
           </div>
 
           {/* Right */}
@@ -37,11 +55,6 @@ export default function CheckoutPage() {
             <OrderSummary />
           </div>
 
-        </div>
-
-        {/* Mobile only */}
-        <div className="block lg:hidden mt-6">
-          <PaymentMethod />
         </div>
 
       </div>
