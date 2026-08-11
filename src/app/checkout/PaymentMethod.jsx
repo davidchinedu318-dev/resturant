@@ -2,7 +2,6 @@
 
 import { CreditCard, Wallet, Lock } from "lucide-react";
 import { useState } from "react";
-import PaystackPop from "@paystack/inline-js";
 import { useSession } from "next-auth/react";
 import { useCart } from "../context/CartContext";
 import Toast from "../Components/Toast";
@@ -27,9 +26,9 @@ export default function PaymentMethod({ deliveryData }) {
     0
   );
 
-  const handlePayment = () => {
+  const handlePayment = async() => {
     setError("");
-
+    const { default: PaystackPop } = await import("@paystack/inline-js");
     // Required checkout information
     if (!deliveryData.phone) {
       setError("Please enter your phone number.");
@@ -122,87 +121,87 @@ export default function PaymentMethod({ deliveryData }) {
         ],
       },
 
-     //verify
-     //create order
-     //clear cart
+      //verify
+      //create order
+      //clear cart
 
-onSuccess: async (transaction) => {
-  try {
-    //  Create order
-    const orderResponse = await fetch("/api/orders/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+      onSuccess: async (transaction) => {
+        try {
+          //  Create order
+          const orderResponse = await fetch("/api/orders/create", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              user_name: session?.user?.name || "",
+              user_email: session?.user?.email || "",
+
+              phone: deliveryData.phone,
+              city: deliveryData.city,
+
+              road: deliveryData.road || "",
+              street: deliveryData.street || "",
+
+              manual_road: deliveryData.manualRoad || "",
+              manual_street: deliveryData.manualStreet || "",
+
+              house_address: deliveryData.houseAddress,
+              delivery_note: deliveryData.deliveryNote || "",
+
+              amount: total,
+
+              cartItems,
+            }),
+          });
+
+          const orderData = await orderResponse.json();
+
+          if (!orderResponse.ok || !orderData.success) {
+            showToastMessage("Payment received, but we couldn't create your order.");
+            return;
+          }
+
+          // Verify the Paystack payment
+          const paymentResponse = await fetch(
+            "/api/orders/update-payment",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                orderId: orderData.orderId,
+                paymentReference: transaction.reference,
+              }),
+            }
+          );
+
+          const paymentData = await paymentResponse.json();
+
+          if (!paymentResponse.ok || !paymentData.success) {
+            showToastMessage(
+              "Payment was received but verification failed."
+            );
+            return;
+          }
+
+
+          showToastMessage(
+            `Order placed successfully! Reference: ${transaction.reference}`
+          );
+
+          // Clear cart
+
+
+        } catch (error) {
+          console.error("Order processing error:", error);
+
+          showToastMessage(
+            "Something went wrong while processing your order."
+          );
+        }
       },
-      body: JSON.stringify({
-        user_name: session?.user?.name || "",
-        user_email: session?.user?.email || "",
-
-        phone: deliveryData.phone,
-        city: deliveryData.city,
-
-        road: deliveryData.road || "",
-        street: deliveryData.street || "",
-
-        manual_road: deliveryData.manualRoad || "",
-        manual_street: deliveryData.manualStreet || "",
-
-        house_address: deliveryData.houseAddress,
-        delivery_note: deliveryData.deliveryNote || "",
-
-        amount: total,
-
-        cartItems,
-      }),
-    });
-
-    const orderData = await orderResponse.json();
-
-    if (!orderResponse.ok || !orderData.success) {
-      showToastMessage("Payment received, but we couldn't create your order.");
-      return;
-    }
-
-    // Verify the Paystack payment
-    const paymentResponse = await fetch(
-      "/api/orders/update-payment",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          orderId: orderData.orderId,
-          paymentReference: transaction.reference,
-        }),
-      }
-    );
-
-    const paymentData = await paymentResponse.json();
-
-    if (!paymentResponse.ok || !paymentData.success) {
-      showToastMessage(
-        "Payment was received but verification failed."
-      );
-      return;
-    }
-
-    
-    showToastMessage(
-      `Order placed successfully! Reference: ${transaction.reference}`
-    );
-
-    // Clear cart
-    
-
-  } catch (error) {
-    console.error("Order processing error:", error);
-
-    showToastMessage(
-      "Something went wrong while processing your order."
-    );
-  }
-},
 
       onCancel() {
         showToastMessage("Payment cancelled");
